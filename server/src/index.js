@@ -17,10 +17,10 @@ app.use(cors({
 
 }));
 
-mongoose.connect(process.env.DATABASE_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(process.env.MONGODB_URI || 'mongodb://localhost/travel-log', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((x) => console.log(`Connected to ${x.connections[0].name}`))
+  .catch(() => console.error('Error connecting to Mongo'));
 
 const port = process.env.PORT || 1300;
 
@@ -31,10 +31,4 @@ app.use(middlewares.errorHandler);
 
 app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}`);
-});
-
-app.get('/', (req, res) => {
-  res.json({
-    message: 'Hello World!',
-  });
 });
