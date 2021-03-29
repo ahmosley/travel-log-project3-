@@ -6,7 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const middlewares = require('./middleware');
-const logs = require('../api/logs');
+const logs = require('../routes/routes');
 
 const app = express();
 app.use(morgan('common'));
