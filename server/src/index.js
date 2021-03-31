@@ -11,8 +11,8 @@ const passport = require('passport');
 const middlewares = require('./middleware');
 
 require('../configs/passport');
-const logs = require('../api/logs');
-const Users = require('../models/User');
+const logs = require('../routes/logs');
+const users = require('../routes/users');
 
 const app = express();
 app.use(morgan('common'));
@@ -37,8 +37,8 @@ mongoose
   .catch(() => console.error('Error connecting to Mongo'));
 
 //This is to use the log model and routes
-app.use('/api/logs', logs);
-app.use('/api/users', Users);
+app.use('/routes/logs', logs);
+app.use('/routes/users', users);
 
 app.get('/', (req, res) => {
   res.json({
@@ -50,11 +50,13 @@ app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
 
 // This is to use the User model and routes
-app.use(session({
-  secret: 'some secret goes here',
-  resave: true,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: 'some secret goes here',
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
 app.use(passport.initialize());
 app.use(passport.session());
 
