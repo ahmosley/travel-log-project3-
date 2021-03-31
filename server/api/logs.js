@@ -92,23 +92,6 @@ router.delete('/logentries/:id', (req, res, next) => {
     });
 });
 
-// User Routes
 
-// router.get('/user', (req, res) => {
-// eslint-disable-next-line no-underscore-dangle
-// User.findById(res.locals.user._id)
-// .then((user) => {
-//       res.json(user);
-//     }).catch(console.error);
-// });
-
-// router.post('/logMeIn', async (req, res) => {
-//   // Check if user already exists
-//   let user = await User.findOne({ email: req.body.email });
-//   // If s/he doesn't exist than create new user
-//   if (!user) {
-//     user = await User.create(req.body);
-//   }
-// });
 
 module.exports = router;
