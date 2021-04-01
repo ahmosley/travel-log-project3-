@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-shadow */
 // routes/auth-routes.js
@@ -19,6 +20,7 @@ authRoutes.get('/', (req, res) => {
 });
 
 authRoutes.post('/signup', (req, res, next) => {
+  console.log('-3-3-3-3-3--3-3-3-3-3-')
   const { username } = req.body;
   const { password } = req.body;
 
@@ -50,6 +52,7 @@ authRoutes.post('/signup', (req, res, next) => {
       username,
       password: hashPass,
     });
+    console.log(aNewUser);
 
     aNewUser.save((err) => {
       if (err) {
@@ -75,6 +78,8 @@ authRoutes.post('/signup', (req, res, next) => {
 
 authRoutes.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, theUser, failureDetails) => {
+
+    // console.log('----> ', theUser)
     if (err) {
       res.status(500).json({ message: 'Something went wrong authenticating user' });
       return;

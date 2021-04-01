@@ -8,7 +8,9 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
+const cookieParser = require('cookie-parser');
 const middlewares = require('./middleware');
+
 
 require('../configs/passport');
 const logs = require('../routes/logs');
@@ -18,16 +20,6 @@ const app = express();
 app.use(morgan('common'));
 app.use(helmet());
 
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN,
-  }),
-);
-
-app.use(express.json());
-
-app.use(express.urlencoded({ extended: true }));
-
 mongoose
   .connect(process.env.MONGODB_URI || 'mongodb://localhost/travel-log', {
     useNewUrlParser: true,
@@ -35,6 +27,36 @@ mongoose
   })
   .then((x) => console.log(`Connected to ${x.connections[0].name}`))
   .catch(() => console.error('Error connecting to Mongo'));
+  
+
+  app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+
+// app.use((req, res) => res.setHeader('Access-Control-Allow-Origin', '*'));
+app.use(cookieParser());
+
+app.use(
+  cors({
+    credentials: true,
+    origin: [process.env.CORS_ORIGIN],
+    allowedHeaders: 'Content-Type, Authorization, X-Requested-With, Accept',
+  }),
+);
+
+
+// This is to use the User model and routes
+app.use(
+  session({
+    secret: 'some secret goes here',
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 //This is to use the log model and routes
 app.use('/routes/logs', logs);
@@ -48,17 +70,6 @@ app.get('/', (req, res) => {
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
-
-// This is to use the User model and routes
-app.use(
-  session({
-    secret: 'some secret goes here',
-    resave: true,
-    saveUninitialized: true,
-  }),
-);
-app.use(passport.initialize());
-app.use(passport.session());
 
 const port = process.env.PORT || 1337;
 app.listen(port, () => {
