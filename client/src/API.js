@@ -1,23 +1,33 @@
-const API_URL = window.location.hostname === 'localhost' ? 'http://localhost:1337' : 'https://travel-log-api.now.sh';
+import axios from "axios";
+//const API_URL =
+  /*window.location.hostname === "localhost"
+    ? `${process.env.REACT_APP_BACKEND_URI}`
+    : "https://travel-log-api.now.sh";*/
+
+//const createHeaders = () => {
+  //return {
+    //headers: {
+    //  Authorization: `Access-Control-Allow-Origin: *`,
+   // },
+  //};
+//};
 
 export async function listLogEntries() {
-  const response = await fetch(`${API_URL}/api/logs`);
-  return response.json();
+  const response = await axios.get(`${process.env.REACT_APP_BACKEND_URI}/api/logs`);
+  console.log({ response });
+  return response.data;
 }
 
 export async function createLogEntry(entry) {
-  const apiKey = entry.apiKey;
-  delete entry.apiKey;
-  const response = await fetch(`${API_URL}/api/logs`, {
-    method: 'POST',
+  const response = await fetch(`${process.env.REACT_APP_BACKEND_URI}/api/logs`, {
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
-      'X-API-KEY': apiKey, 
+      "content-type": "application/json",
     },
     body: JSON.stringify(entry),
   });
   let json;
-  if (response.headers.get('content-type').includes('text/html')) {
+  if (response.headers.get("content-type").includes("text/html")) {
     const message = await response.text();
     json = {
       message,
