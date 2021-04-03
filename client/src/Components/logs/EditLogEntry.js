@@ -3,24 +3,38 @@ import axios from "axios";
 
 class EditLogEntry extends Component {
   state = {
-    title: this.props.LogEntry.title,
-    description: this.props.LogEntry.description,
+    title: "",
+    description: "",
   };
 
+  componentDidMount() {
+    if (this.props.logData) {
+      this.setState({
+        title: this.props.logData.title,
+        description: this.props.logData.description,
+      });
+    }
+  }
+
   handleFormSubmit = (event) => {
+    event.preventDefault();
     const title = this.state.title;
     const description = this.state.description;
 
-    event.preventDefault();
+    console.log({ editProps: this.props });
 
     axios
-      .put(`${process.env.REACT_APP_BACKEND_URI}api/logs/${this.props.LogEntry._id}`, {
-        title,
-        description,
-      })
+      .put(
+        `${process.env.REACT_APP_BACKEND_URI}/api/logs/logentries/${this.props.logData._id}`,
+        {
+          title,
+          description,
+        }
+      )
       .then(() => {
-        this.props.getTheLogEntry();
-        // after submitting the form, redirect to '/projects'
+        console.log({ thenProps: this.props });
+        // this.props.getThelog();
+        // after submitting the form, redirect to '/logs'
         this.props.history.push("/map");
       })
       .catch((error) => console.log(error));
@@ -42,7 +56,7 @@ class EditLogEntry extends Component {
     return (
       <div>
         <hr />
-        <h3>Edit form</h3>
+        <h3>Edit: {this.state.title}</h3>
         <form onSubmit={this.handleFormSubmit}>
           <label>Title:</label>
           <input
@@ -57,6 +71,7 @@ class EditLogEntry extends Component {
             value={this.state.description}
             onChange={(e) => this.handleChangeDesc(e)}
           />
+
           <input type="submit" value="Submit" />
         </form>
       </div>

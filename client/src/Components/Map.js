@@ -1,12 +1,15 @@
-import React from "react";
+/* eslint-disable no-lone-blocks */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
+import React, { Component } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import { listLogEntries } from "../API";
 import LogEntryForm from "./logs/AddLogEntry";
-import LogDetails from "./logs/LogDetails";
 import EditLogEntry from "./logs/EditLogEntry";
-import { Link } from 'react-router-dom'; 
+import LogDetails from "./logs/LogDetails";
+import { Link } from "react-router-dom";
 
 const Map = (props) => {
   //console.log(props);
@@ -37,8 +40,13 @@ const Map = (props) => {
       longitude,
     });
   };
- 
-  const deleteLog = (id) => {
+
+  //function editLog(id) {
+  //this.setState({editLogDisplay: true, editLogID: id});
+
+  //}
+
+  function deleteLog(id) {
     //const { id } = this.props.match;
     axios
       .delete(`${process.env.REACT_APP_BACKEND_URI}/api/logs/logentries/${id}`)
@@ -48,7 +56,8 @@ const Map = (props) => {
       .catch((err) => {
         console.log(err);
       });
-  };
+  }
+
   return (
     <ReactMapGL
       {...viewport}
@@ -104,12 +113,13 @@ const Map = (props) => {
             >
               <div className="popup">
                 <h3>{entry.title}</h3>
-                <p>{entry.comments}</p>
+                <p>{entry.description}</p>
                 <small>
                   Visited on: {new Date(entry.visitDate).toLocaleDateString()}
                 </small>
                 {entry.image && <img src={entry.image} alt={entry.title} />}
               </div>
+              <Link to="/edit-location">Edit Logs</Link>
               <button onClick={() => deleteLog(entry._id)}>Delete</button>
             </Popup>
           ) : null}

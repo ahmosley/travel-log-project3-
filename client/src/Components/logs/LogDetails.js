@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import EditLogEntry from "./EditLogEntry"
-
+import EditLogEntry from "./EditLogEntry";
 
 class LogDetails extends Component {
-  state = {};
-
+  state = {
+    // logEntry: {}
+  }
   componentDidMount() {
     this.getSingleLog();
   }
@@ -14,10 +14,14 @@ class LogDetails extends Component {
   getSingleLog = () => {
     const { params } = this.props.match;
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URI}/api/logs/${params.id}`)
+      .get(
+        `${process.env.REACT_APP_BACKEND_URI}/api/logs/logentry/${params.id}`
+      )
       .then((responseFromApi) => {
-        const theLog = responseFromApi.data;
-        this.setState(theLog);
+        const logEntry = responseFromApi.data;
+        console.log(`${logEntry}`)
+        this.setState(logEntry);
+  
       })
       .catch((err) => {
         console.log(err);
@@ -28,9 +32,9 @@ class LogDetails extends Component {
     if (!this.state.title) {
       this.getSingleLog();
     } else {
-      //                                         
-      //                                                                                          
-      //                                                                                          
+      //
+      //
+      //
       return (
         <EditLogEntry
           theLog={this.state}
@@ -41,31 +45,28 @@ class LogDetails extends Component {
     }
   };
 
-  // DELETE PROJECT:
-  //deleteLog = (id) => {
+  // DELETE log:
+  /*deleteLog = () => {
     //const { id } = this.props.match;
-    // axios
-     // .delete(`http://localhost:1337/api/logs/${id}`)
-     // .then(() => {
-      //  this.props.history.push("/projects"); // !!!
-     // })
-      //.catch((err) => {
-        //onsole.log(err);
-      //});
-  //};
+    axios
+      .delete(`${process.env.REACT_APP_BACKEND_URI}/api/logs/logentries/${id}`)
+      .then(() => {
+        props.history.push("/map"); // !!!
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };*/
 
   render() {
     return (
       <div>
         <h1>{this.state.title}</h1>
         <p>{this.state.description}</p>
-        <div>{this.renderEditForm()} </div>
-        <button onClick={() => this.deleteLog()}>
-          Delete project
-        </button>{" "}
+        <div>{this.renderEditForm} </div>
         {/* <== !!! */}
         <br />
-        <Link to={"/map"}>Back to map</Link>
+        <Link to={"/home"}>Back home</Link>
       </div>
     );
   }

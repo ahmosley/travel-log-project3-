@@ -7,6 +7,9 @@ import Login from "./Components/auth/Login";
 import Home from "./Components/Home";
 import Navbar from "./Components/Navbar";
 import Map from "./Components/Map";
+import LogDetails from "./Components/logs/LogDetails";
+import EditLocation from "./Components/editLocations"
+//import EditLogEntry from "./Components/logs/EditLogEntry";
 
 class App extends Component {
   state = { loggedInUser: null };
@@ -44,7 +47,9 @@ class App extends Component {
           <Navbar userInSession={this.state.loggedInUser} />
           <Switch>
             <Route exact path="/home" component={Home} />
-            <Route exact path="/map" component={Map} />
+            <Route exact path="/map" component={Map}/>
+            <Route exact path= "/log-details" component={LogDetails}/>
+            <Route exact path="/edit-location" component={EditLocation}/>
           </Switch>
         </div>
       );
