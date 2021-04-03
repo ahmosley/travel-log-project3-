@@ -34,7 +34,7 @@ class EditLocation extends Component {
             </div>
           );
         })}
-      </div>
+      </div> 
     );
   }
 }
